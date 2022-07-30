@@ -47,4 +47,9 @@ public class UnitController {
 	public ResponseEntity<PersonDto> findDirectorOfUnitById(@PathVariable(value = "id") final Long unitId) {
 		return ResponseEntity.ok(service.findDirectorOfUnitById(unitId));
 	}
+
+	@GetMapping(path = "{id}/members")
+	public ResponseEntity<List<PersonDto>> findMemebersOfUnitById(@PathVariable(value = "id") final Long unitId) {
+		return ResponseEntity.ok(service.findMembersOfUnitById(unitId));
+	}
 }

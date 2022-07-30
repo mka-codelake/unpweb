@@ -47,4 +47,9 @@ public class UnitService {
 		return mapper.personToPersonDto(director);
 	}
 
+	public List<PersonDto> findMembersOfUnitById(final Long unitId) {
+		final Unit unit = repo.findById(unitId).orElseThrow(EntityNotFoundException::new);
+		return unit.getMembers().stream().map(mapper::personToPersonDto).toList();
+	}
+
 }
