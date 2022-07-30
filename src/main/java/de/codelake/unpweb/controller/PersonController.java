@@ -41,4 +41,9 @@ public class PersonController {
 	public ResponseEntity<PersonExtDto> findPersonExtById(@PathVariable final Long id) {
 		return ResponseEntity.ok(service.findPersonExtById(id));
 	}
+
+	@GetMapping(path = "{id}/supervisor")
+	public ResponseEntity<PersonDto> findSupervisorOfPersonById(@PathVariable(name = "id") final Long personId) {
+		return ResponseEntity.ok(service.findSupervisorOfPersonById(personId));
+	}
 }
