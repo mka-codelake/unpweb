@@ -5,12 +5,14 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.codelake.unpweb.domain.dto.UnitDto;
 import de.codelake.unpweb.service.UnitService;
 
 @RestController
+@RequestMapping("units")
 public class UnitController {
 
 	private final UnitService service;
@@ -19,12 +21,12 @@ public class UnitController {
 		this.service = service;
 	}
 
-	@GetMapping(path = "units/{id}")
+	@GetMapping(path = "{id}")
 	public ResponseEntity<UnitDto> findUnitById(@PathVariable final Long id) {
 		return ResponseEntity.ok(service.findUnitById(id));
 	}
 
-	@GetMapping(path = "units")
+	@GetMapping
 	public ResponseEntity<List<UnitDto>> findAllUnits() {
 		return ResponseEntity.ok(service.findAllUnits());
 	}
