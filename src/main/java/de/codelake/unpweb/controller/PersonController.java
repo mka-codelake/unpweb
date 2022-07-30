@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import de.codelake.unpweb.domain.dto.PersonDto;
 import de.codelake.unpweb.domain.dto.PersonExtDto;
+import de.codelake.unpweb.domain.dto.UnitDto;
 import de.codelake.unpweb.service.PersonService;
 
 @RestController
@@ -45,5 +46,10 @@ public class PersonController {
 	@GetMapping(path = "{id}/supervisor")
 	public ResponseEntity<PersonDto> findSupervisorOfPersonById(@PathVariable(name = "id") final Long personId) {
 		return ResponseEntity.ok(service.findSupervisorOfPersonById(personId));
+	}
+
+	@GetMapping(path = "{id}/belongsto")
+	public ResponseEntity<UnitDto> findBelongsToOfPersonById(@PathVariable(name = "id") final Long personId) {
+		return ResponseEntity.ok(service.findBelongsToOfPersonById(personId));
 	}
 }
