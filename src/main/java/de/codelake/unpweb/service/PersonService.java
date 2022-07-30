@@ -1,5 +1,7 @@
 package de.codelake.unpweb.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import de.codelake.unpweb.domain.dto.PersonDto;
@@ -19,6 +21,10 @@ public class PersonService {
 
 	public PersonDto getPersonById(final Long id) {
 		return mapper.personToPersonDto(repo.getReferenceById(id));
+	}
+
+	public List<PersonDto> getPersons() {
+		return repo.findAll().stream().map(mapper::personToPersonDto).toList();
 	}
 
 }

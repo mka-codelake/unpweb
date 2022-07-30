@@ -1,5 +1,7 @@
 package de.codelake.unpweb.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,5 +22,10 @@ public class PersonController {
 	@GetMapping(path = "persons/{id}")
 	public ResponseEntity<PersonDto> getPersonById(@PathVariable final Long id) {
 		return ResponseEntity.ok(service.getPersonById(id));
+	}
+
+	@GetMapping(path = "persons")
+	public ResponseEntity<List<PersonDto>> getPersons() {
+		return ResponseEntity.ok(service.getPersons());
 	}
 }
