@@ -36,4 +36,9 @@ public class PersonController {
 	public ResponseEntity<List<PersonExtDto>> findPersonsExt() {
 		return ResponseEntity.ok(service.findPersonsExt());
 	}
+
+	@GetMapping(path = "/ext/{id}")
+	public ResponseEntity<PersonExtDto> findPersonExtById(@PathVariable final Long id) {
+		return ResponseEntity.ok(service.findPersonExtById(id));
+	}
 }

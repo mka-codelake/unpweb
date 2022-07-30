@@ -33,4 +33,8 @@ public class PersonService {
 		return repo.findAll().stream().map(mapper::personToPersonExtDto).toList();
 	}
 
+	public PersonExtDto findPersonExtById(final Long id) {
+		return mapper.personToPersonExtDto(repo.findById(id).orElseThrow(EntityNotFoundException::new));
+	}
+
 }
