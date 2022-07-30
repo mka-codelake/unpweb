@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 
 import de.codelake.unpweb.domain.dto.PersonDto;
-import de.codelake.unpweb.domain.dto.PersonExtDto;
+import de.codelake.unpweb.domain.dto.PersonSlimDto;
 import de.codelake.unpweb.domain.dto.UnitDto;
 import de.codelake.unpweb.domain.mapper.EntityDtoMapper;
 import de.codelake.unpweb.domain.model.Person;
@@ -25,20 +25,20 @@ public class PersonService {
 		this.mapper = mapper;
 	}
 
-	public PersonDto findPersonById(final Long id) {
-		return mapper.personToPersonDto(repo.findById(id).orElseThrow(EntityNotFoundException::new));
+	public PersonSlimDto findPersonSlimById(final Long id) {
+		return mapper.personToPersonSlimDto(repo.findById(id).orElseThrow(EntityNotFoundException::new));
+	}
+
+	public List<PersonSlimDto> findPersonsSlim() {
+		return repo.findAll().stream().map(mapper::personToPersonSlimDto).toList();
 	}
 
 	public List<PersonDto> findPersons() {
 		return repo.findAll().stream().map(mapper::personToPersonDto).toList();
 	}
 
-	public List<PersonExtDto> findPersonsExt() {
-		return repo.findAll().stream().map(mapper::personToPersonExtDto).toList();
-	}
-
-	public PersonExtDto findPersonExtById(final Long id) {
-		return mapper.personToPersonExtDto(repo.findById(id).orElseThrow(EntityNotFoundException::new));
+	public PersonDto findPersonById(final Long id) {
+		return mapper.personToPersonDto(repo.findById(id).orElseThrow(EntityNotFoundException::new));
 	}
 
 	public PersonDto findSupervisorOfPersonById(final Long personId) {

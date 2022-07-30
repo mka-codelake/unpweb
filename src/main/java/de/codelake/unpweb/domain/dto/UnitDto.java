@@ -1,4 +1,6 @@
 package de.codelake.unpweb.domain.dto;
 
-public record UnitDto(Long id, String name, String abbreviation) {
+import java.util.Set;
+
+public record UnitDto(Long id, String name, String abbreviation, Set<PersonSlimDto> members, PersonSlimDto director) {
 }

@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.codelake.unpweb.domain.dto.UnitDto;
-import de.codelake.unpweb.domain.dto.UnitExtDto;
+import de.codelake.unpweb.domain.dto.UnitSlimDto;
 import de.codelake.unpweb.service.UnitService;
 
 @RestController
@@ -22,9 +22,14 @@ public class UnitController {
 		this.service = service;
 	}
 
-	@GetMapping(path = "{id}")
-	public ResponseEntity<UnitDto> findUnitById(@PathVariable final Long id) {
-		return ResponseEntity.ok(service.findUnitById(id));
+	@GetMapping(path = "/slim/{id}")
+	public ResponseEntity<UnitSlimDto> findUnitSlimById(@PathVariable final Long id) {
+		return ResponseEntity.ok(service.findUnitSlimById(id));
+	}
+
+	@GetMapping(path = "/slim")
+	public ResponseEntity<List<UnitSlimDto>> findUnitsSlim() {
+		return ResponseEntity.ok(service.findUnitsSlim());
 	}
 
 	@GetMapping
@@ -32,13 +37,8 @@ public class UnitController {
 		return ResponseEntity.ok(service.findUnits());
 	}
 
-	@GetMapping(path = "/ext")
-	public ResponseEntity<List<UnitExtDto>> findUnitsExt() {
-		return ResponseEntity.ok(service.findUnitsExt());
-	}
-
-	@GetMapping(path = "/ext/{id}")
-	public ResponseEntity<UnitExtDto> findUnitExtById(@PathVariable final Long id) {
-		return ResponseEntity.ok(service.findUnitExtById(id));
+	@GetMapping(path = "{id}")
+	public ResponseEntity<UnitDto> findUnitById(@PathVariable final Long id) {
+		return ResponseEntity.ok(service.findUnitById(id));
 	}
 }

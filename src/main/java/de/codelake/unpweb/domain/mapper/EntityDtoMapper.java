@@ -3,28 +3,28 @@ package de.codelake.unpweb.domain.mapper;
 import org.mapstruct.Mapper;
 
 import de.codelake.unpweb.domain.dto.PersonDto;
-import de.codelake.unpweb.domain.dto.PersonExtDto;
+import de.codelake.unpweb.domain.dto.PersonSlimDto;
 import de.codelake.unpweb.domain.dto.UnitDto;
-import de.codelake.unpweb.domain.dto.UnitExtDto;
+import de.codelake.unpweb.domain.dto.UnitSlimDto;
 import de.codelake.unpweb.domain.model.Person;
 import de.codelake.unpweb.domain.model.Unit;
 
 @Mapper(componentModel = "spring")
 public interface EntityDtoMapper {
 
+	UnitSlimDto unitToUnitSlimDto(Unit unit);
+
+	Unit unitSlimDtoToUnit(UnitSlimDto unitDto);
+
 	UnitDto unitToUnitDto(Unit unit);
 
-	Unit unitDtoToUnit(UnitDto unitDto);
+	Unit unitDtoToUnit(UnitDto unitExtDto);
 
-	UnitExtDto unitToUnitExtDto(Unit unit);
+	PersonSlimDto personToPersonSlimDto(Person person);
 
-	Unit unitExtDtoToUnit(UnitExtDto unitExtDto);
+	Person personSlimDtoToPerson(PersonSlimDto personDto);
 
 	PersonDto personToPersonDto(Person person);
 
-	Person personDtoToPerson(PersonDto personDto);
-
-	PersonExtDto personToPersonExtDto(Person person);
-
-	Person personExtDtoToPerson(PersonExtDto personExtDto);
+	Person personDtoToPerson(PersonDto personExtDto);
 }
