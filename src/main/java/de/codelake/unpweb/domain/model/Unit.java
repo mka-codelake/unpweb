@@ -9,6 +9,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
@@ -21,12 +22,15 @@ public class Unit {
 	private String abbreviation;
 
 	@OneToOne
+	@EqualsAndHashCode.Exclude
 	private Unit parentUnit;
 
 	@OneToMany(mappedBy = "belongsTo", fetch = FetchType.LAZY)
+	@EqualsAndHashCode.Exclude
 	private Set<Person> members;
 
 	@OneToOne
+	@EqualsAndHashCode.Exclude
 	private Person director;
 
 }

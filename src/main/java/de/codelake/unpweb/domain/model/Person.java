@@ -6,6 +6,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
@@ -19,9 +20,11 @@ public class Person {
 	private String role;
 
 	@OneToOne
+	@EqualsAndHashCode.Exclude
 	private Person supervisor;
 
 	@ManyToOne
+	@EqualsAndHashCode.Exclude
 	private Unit belongsTo;
 
 }

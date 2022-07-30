@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.codelake.unpweb.domain.dto.UnitDto;
+import de.codelake.unpweb.domain.dto.UnitExtDto;
 import de.codelake.unpweb.service.UnitService;
 
 @RestController
@@ -27,7 +28,17 @@ public class UnitController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<UnitDto>> findAllUnits() {
-		return ResponseEntity.ok(service.findAllUnits());
+	public ResponseEntity<List<UnitDto>> findUnits() {
+		return ResponseEntity.ok(service.findUnits());
+	}
+
+	@GetMapping(path = "/ext")
+	public ResponseEntity<List<UnitExtDto>> findUnitsExt() {
+		return ResponseEntity.ok(service.findUnitsExt());
+	}
+
+	@GetMapping(path = "/ext/{id}")
+	public ResponseEntity<UnitExtDto> findUnitExtById(@PathVariable final Long id) {
+		return ResponseEntity.ok(service.findUnitExtById(id));
 	}
 }
