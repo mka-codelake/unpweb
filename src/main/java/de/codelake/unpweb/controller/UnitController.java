@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.codelake.unpweb.domain.dto.PersonDto;
 import de.codelake.unpweb.domain.dto.UnitDto;
 import de.codelake.unpweb.domain.dto.UnitSlimDto;
 import de.codelake.unpweb.service.UnitService;
@@ -40,5 +41,10 @@ public class UnitController {
 	@GetMapping(path = "{id}")
 	public ResponseEntity<UnitDto> findUnitById(@PathVariable final Long id) {
 		return ResponseEntity.ok(service.findUnitById(id));
+	}
+
+	@GetMapping(path = "{id}/director")
+	public ResponseEntity<PersonDto> findDirectorOfUnitById(@PathVariable(value = "id") final Long unitId) {
+		return ResponseEntity.ok(service.findDirectorOfUnitById(unitId));
 	}
 }
