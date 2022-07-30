@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import de.codelake.unpweb.domain.dto.PersonDto;
+import de.codelake.unpweb.domain.dto.PersonExtDto;
 import de.codelake.unpweb.domain.mapper.EntityDtoMapper;
 import de.codelake.unpweb.domain.repository.PersonRepository;
 import de.codelake.unpweb.exception.EntityNotFoundException;
@@ -26,6 +27,10 @@ public class PersonService {
 
 	public List<PersonDto> findPersons() {
 		return repo.findAll().stream().map(mapper::personToPersonDto).toList();
+	}
+
+	public List<PersonExtDto> findPersonsExt() {
+		return repo.findAll().stream().map(mapper::personToPersonExtDto).toList();
 	}
 
 }

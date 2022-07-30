@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.codelake.unpweb.domain.dto.PersonDto;
+import de.codelake.unpweb.domain.dto.PersonExtDto;
 import de.codelake.unpweb.service.PersonService;
 
 @RestController
@@ -29,5 +30,10 @@ public class PersonController {
 	@GetMapping
 	public ResponseEntity<List<PersonDto>> findPersons() {
 		return ResponseEntity.ok(service.findPersons());
+	}
+
+	@GetMapping(path = "/ext")
+	public ResponseEntity<List<PersonExtDto>> findPersonsExt() {
+		return ResponseEntity.ok(service.findPersonsExt());
 	}
 }

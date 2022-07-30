@@ -3,6 +3,7 @@ package de.codelake.unpweb.domain.mapper;
 import org.mapstruct.Mapper;
 
 import de.codelake.unpweb.domain.dto.PersonDto;
+import de.codelake.unpweb.domain.dto.PersonExtDto;
 import de.codelake.unpweb.domain.dto.UnitDto;
 import de.codelake.unpweb.domain.model.Person;
 import de.codelake.unpweb.domain.model.Unit;
@@ -17,4 +18,8 @@ public interface EntityDtoMapper {
 	PersonDto personToPersonDto(Person person);
 
 	Person personDtoToPerson(PersonDto personDto);
+
+	PersonExtDto personToPersonExtDto(Person person);
+
+	Person personExtDtoToPerson(PersonExtDto personExtDto);
 }
