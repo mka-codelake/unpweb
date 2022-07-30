@@ -1,5 +1,7 @@
 package de.codelake.unpweb.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,4 +24,8 @@ public class UnitController {
 		return ResponseEntity.ok(service.getUnitById(id));
 	}
 
+	@GetMapping(path = "units")
+	public ResponseEntity<List<UnitDto>> findAllUnits() {
+		return ResponseEntity.ok(service.findAllUnits());
+	}
 }

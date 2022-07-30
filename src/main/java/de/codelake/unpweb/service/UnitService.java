@@ -1,5 +1,7 @@
 package de.codelake.unpweb.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import de.codelake.unpweb.domain.dto.UnitDto;
@@ -19,6 +21,10 @@ public class UnitService {
 
 	public UnitDto getUnitById(final Long id) {
 		return mapper.unitToUnitDto(repo.getReferenceById(id));
+	}
+
+	public List<UnitDto> findAllUnits() {
+		return repo.findAll().stream().map(mapper::unitToUnitDto).toList();
 	}
 
 }
