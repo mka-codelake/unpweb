@@ -20,8 +20,8 @@ public class UnitController {
 	}
 
 	@GetMapping(path = "units/{id}")
-	public ResponseEntity<UnitDto> getUnitById(@PathVariable final Long id) {
-		return ResponseEntity.ok(service.getUnitById(id));
+	public ResponseEntity<UnitDto> findUnitById(@PathVariable final Long id) {
+		return ResponseEntity.ok(service.findUnitById(id));
 	}
 
 	@GetMapping(path = "units")

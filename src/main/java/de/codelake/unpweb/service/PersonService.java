@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import de.codelake.unpweb.domain.dto.PersonDto;
 import de.codelake.unpweb.domain.mapper.EntityDtoMapper;
 import de.codelake.unpweb.domain.repository.PersonRepository;
+import de.codelake.unpweb.exception.EntityNotFoundException;
 
 @Service
 public class PersonService {
@@ -19,11 +20,11 @@ public class PersonService {
 		this.mapper = mapper;
 	}
 
-	public PersonDto getPersonById(final Long id) {
-		return mapper.personToPersonDto(repo.getReferenceById(id));
+	public PersonDto findPersonById(final Long id) {
+		return mapper.personToPersonDto(repo.findById(id).orElseThrow(EntityNotFoundException::new));
 	}
 
-	public List<PersonDto> getPersons() {
+	public List<PersonDto> findPersons() {
 		return repo.findAll().stream().map(mapper::personToPersonDto).toList();
 	}
 

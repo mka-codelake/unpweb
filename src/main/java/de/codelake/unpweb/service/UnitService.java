@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import de.codelake.unpweb.domain.dto.UnitDto;
 import de.codelake.unpweb.domain.mapper.EntityDtoMapper;
 import de.codelake.unpweb.domain.repository.UnitRepository;
+import de.codelake.unpweb.exception.EntityNotFoundException;
 
 @Service
 public class UnitService {
@@ -19,8 +20,8 @@ public class UnitService {
 		this.mapper = mapper;
 	}
 
-	public UnitDto getUnitById(final Long id) {
-		return mapper.unitToUnitDto(repo.getReferenceById(id));
+	public UnitDto findUnitById(final Long id) {
+		return mapper.unitToUnitDto(repo.findById(id).orElseThrow(EntityNotFoundException::new));
 	}
 
 	public List<UnitDto> findAllUnits() {

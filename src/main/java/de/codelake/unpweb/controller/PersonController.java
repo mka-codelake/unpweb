@@ -20,12 +20,12 @@ public class PersonController {
 	}
 
 	@GetMapping(path = "persons/{id}")
-	public ResponseEntity<PersonDto> getPersonById(@PathVariable final Long id) {
-		return ResponseEntity.ok(service.getPersonById(id));
+	public ResponseEntity<PersonDto> findPersonById(@PathVariable final Long id) {
+		return ResponseEntity.ok(service.findPersonById(id));
 	}
 
 	@GetMapping(path = "persons")
-	public ResponseEntity<List<PersonDto>> getPersons() {
-		return ResponseEntity.ok(service.getPersons());
+	public ResponseEntity<List<PersonDto>> findPersons() {
+		return ResponseEntity.ok(service.findPersons());
 	}
 }
