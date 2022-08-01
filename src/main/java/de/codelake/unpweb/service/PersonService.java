@@ -2,13 +2,11 @@ package de.codelake.unpweb.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import de.codelake.unpweb.domain.dto.PersonDto;
-import de.codelake.unpweb.domain.dto.PersonSlimDto;
 import de.codelake.unpweb.domain.dto.UnitDto;
 import de.codelake.unpweb.domain.mapper.EntityDtoMapper;
 import de.codelake.unpweb.domain.model.Person;
@@ -34,14 +32,6 @@ public class PersonService {
 		return repo.findById(id).orElseThrow(EntityNotFoundException::new);
 	}
 
-	public PersonSlimDto findPersonSlimById(final Long id) {
-		return mapper.personToPersonSlimDto(findPerson(id));
-	}
-
-	public List<PersonSlimDto> findPersonsSlim() {
-		return repo.findAll().stream().map(mapper::personToPersonSlimDto).toList();
-	}
-
 	public List<PersonDto> findPersons() {
 		return repo.findAll().stream().map(mapper::personToPersonDto).toList();
 	}
@@ -64,23 +54,6 @@ public class PersonService {
 
 	public PersonDto saveNew() {
 		return mapper.personToPersonDto(repo.save(new Person()));
-	}
-
-	public void moveMembersToUnit(final Set<PersonSlimDto> members, final Unit savedUnit) {
-		final List<Person> movedMembersList = findAllMembersByIds(members)
-				.stream()
-				.peek(person -> person.setBelongsTo(savedUnit))
-				.peek(person -> {
-					if(!person.equals(savedUnit.getDirector())) {
-						person.setSupervisor(savedUnit.getDirector());
-					}
-				})
-				.toList();
-		repo.saveAll(movedMembersList);
-	}
-
-	private List<Person> findAllMembersByIds(final Set<PersonSlimDto> members) {
-		return repo.findAllById(members.stream().map(PersonSlimDto::id).toList());
 	}
 
 	public void setBelongsTo(final PersonDto newMemberDto, final UnitDto unitDto) {
