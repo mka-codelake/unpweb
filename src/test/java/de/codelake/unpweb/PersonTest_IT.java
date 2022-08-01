@@ -100,6 +100,8 @@ public class PersonTest_IT extends AbstractTest_IT {
 	@DisplayName("PUT update person name")
 	public void updatePersonName() {
 		final String newPersonName = "NewPersonName";
+		final String newPersonInitials = "AB";
+		final String newPersonRole = "CHEF";
 
 		// *** This would handle the client somehow ***
 		final String endpoint = "/persons/3";
@@ -107,6 +109,8 @@ public class PersonTest_IT extends AbstractTest_IT {
 		PersonDto personDto = response.getBody();
 		final Person person = mapper.personDtoToPerson(personDto);
 		person.setName(newPersonName);
+		person.setInitials(newPersonInitials);
+		person.setRole(newPersonRole);
 		personDto = mapper.personToPersonDto(person);
 
 		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
@@ -119,12 +123,18 @@ public class PersonTest_IT extends AbstractTest_IT {
 		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().name()).isNotNull();
 		assertThat(response.getBody().name()).isEqualTo(newPersonName);
+		assertThat(response.getBody().initials()).isNotNull();
+		assertThat(response.getBody().initials()).isEqualTo(newPersonInitials);
+		assertThat(response.getBody().role()).isNotNull();
+		assertThat(response.getBody().role()).isEqualTo(newPersonRole);
 	}
 
 	@Test
 	@DisplayName("PUT update person name with empty value")
 	public void deletePersonName() {
 		final String newPersonName = "";
+		final String newPersonInitials = "";
+		final String newPersonRole = "";
 
 		// *** This would handle the client somehow ***
 		final String endpoint = "/persons/3";
@@ -132,6 +142,8 @@ public class PersonTest_IT extends AbstractTest_IT {
 		PersonDto personDto = response.getBody();
 		final Person person = mapper.personDtoToPerson(personDto);
 		person.setName(newPersonName);
+		person.setInitials(newPersonInitials);
+		person.setRole(newPersonRole);
 		personDto = mapper.personToPersonDto(person);
 
 		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
@@ -144,104 +156,8 @@ public class PersonTest_IT extends AbstractTest_IT {
 		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().name()).isNotNull();
 		assertThat(response.getBody().name()).isEqualTo(newPersonName);
-	}
-
-	@Test
-	@DisplayName("PUT update person initials")
-	public void updatePersonInitials() {
-		final String newPersonInitials = "AB";
-
-		// *** This would handle the client somehow ***
-		final String endpoint = "/persons/4";
-		ResponseEntity<PersonDto> response = template.getForEntity(endpoint, PersonDto.class);
-		PersonDto personDto = response.getBody();
-		final Person person = mapper.personDtoToPerson(personDto);
-		person.setInitials(newPersonInitials);
-		personDto = mapper.personToPersonDto(person);
-
-		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
-
-		// ***** Actual Test *****
-		template.put(endpoint, request);
-
-		response = template.getForEntity(endpoint, PersonDto.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().initials()).isNotNull();
 		assertThat(response.getBody().initials()).isEqualTo(newPersonInitials);
-	}
-
-	@Test
-	@DisplayName("PUT update person initials with empty value")
-	public void deletePersonInitials() {
-		final String newPersonInitials = "";
-
-		// *** This would handle the client somehow ***
-		final String endpoint = "/persons/4";
-		ResponseEntity<PersonDto> response = template.getForEntity(endpoint, PersonDto.class);
-		PersonDto personDto = response.getBody();
-		final Person person = mapper.personDtoToPerson(personDto);
-		person.setInitials(newPersonInitials);
-		personDto = mapper.personToPersonDto(person);
-
-		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
-
-		// ***** Actual Test *****
-		template.put(endpoint, request);
-
-		response = template.getForEntity(endpoint, PersonDto.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).isNotNull();
-		assertThat(response.getBody().initials()).isNotNull();
-		assertThat(response.getBody().initials()).isEqualTo(newPersonInitials);
-	}
-
-	@Test
-	@DisplayName("PUT update person role")
-	public void updatePersonRole() {
-		final String newPersonRole = "CHEF";
-
-		// *** This would handle the client somehow ***
-		final String endpoint = "/persons/5";
-		ResponseEntity<PersonDto> response = template.getForEntity(endpoint, PersonDto.class);
-		PersonDto personDto = response.getBody();
-		final Person person = mapper.personDtoToPerson(personDto);
-		person.setRole(newPersonRole);
-		personDto = mapper.personToPersonDto(person);
-
-		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
-
-		// ***** Actual Test *****
-		template.put(endpoint, request);
-
-		response = template.getForEntity(endpoint, PersonDto.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).isNotNull();
-		assertThat(response.getBody().role()).isNotNull();
-		assertThat(response.getBody().role()).isEqualTo(newPersonRole);
-	}
-
-	@Test
-	@DisplayName("PUT update person role with empty value")
-	public void deletePersonRole() {
-		final String newPersonRole = "";
-
-		// *** This would handle the client somehow ***
-		final String endpoint = "/persons/5";
-		ResponseEntity<PersonDto> response = template.getForEntity(endpoint, PersonDto.class);
-		PersonDto personDto = response.getBody();
-		final Person person = mapper.personDtoToPerson(personDto);
-		person.setRole(newPersonRole);
-		personDto = mapper.personToPersonDto(person);
-
-		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
-
-		// ***** Actual Test *****
-		template.put(endpoint, request);
-
-		response = template.getForEntity(endpoint, PersonDto.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().role()).isNotNull();
 		assertThat(response.getBody().role()).isEqualTo(newPersonRole);
 	}
