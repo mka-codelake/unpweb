@@ -27,49 +27,10 @@ public class UnitController {
 		this.service = service;
 	}
 
-	// ###########
-	// ### GET ###
-	// ###########
-
-	//	@GetMapping(path = "/slim/{id}")
-	//	public ResponseEntity<UnitSlimDto> findUnitSlimById(@PathVariable final Long id) {
-	//		return ResponseEntity.ok(service.findUnitSlimById(id));
-	//	}
-	//
-	//	@GetMapping(path = "/slim")
-	//	public ResponseEntity<List<UnitSlimDto>> findUnitsSlim() {
-	//		return ResponseEntity.ok(service.findUnitsSlim());
-	//	}
-
 	@GetMapping
 	public ResponseEntity<List<UnitDto>> findAllUnits() {
 		return ResponseEntity.ok(service.findAllUnits());
 	}
-
-	@GetMapping(path = "{id}")
-	public ResponseEntity<UnitDto> findUnitById(@PathVariable final Long id) {
-		return ResponseEntity.ok(service.findUnitById(id));
-	}
-
-	@GetMapping(path = "{id}/director")
-	public ResponseEntity<PersonDto> findDirectorOfUnitById(@PathVariable(value = "id") final Long unitId) {
-		return ResponseEntity.ok(service.findDirectorOfUnitById(unitId));
-	}
-
-	@GetMapping(path = "{id}/members")
-	public ResponseEntity<List<PersonDto>> findMemebersOfUnitById(@PathVariable(value = "id") final Long unitId) {
-		return ResponseEntity.ok(service.findMembersOfUnitById(unitId));
-	}
-
-	// ############
-	// ### POST ###
-	// ############
-
-	//	@PostMapping
-	//	public ResponseEntity<UnitDto> createNewUnit(@RequestBody final UnitDto unsavedUnitDto) {
-	//		final UnitDto savedUnitDto = service.save(unsavedUnitDto);
-	//		return ResponseEntity.created(URI.create(String.format("units/%d", savedUnitDto.id()))).build();
-	//	}
 
 	@PostMapping
 	public ResponseEntity<UnitDto> createNewUnit() {
@@ -77,22 +38,24 @@ public class UnitController {
 		return ResponseEntity.created(URI.create(String.format("units/%d", savedUnitDto.id()))).body(savedUnitDto);
 	}
 
-	//	@PostMapping(path = "{id}/director")
-	//	public ResponseEntity<UnitDto> setDirector(@PathVariable(value = "id") final Long unitId,
-	//			@RequestBody final PersonDto personDto) {
-	//		final UnitDto savedUnitDto = service.setDirector(unitId, personDto);
-	//		return ResponseEntity.ok(savedUnitDto);
-	//	}
+	@GetMapping(path = "{id}")
+	public ResponseEntity<UnitDto> findUnitById(@PathVariable final Long id) {
+		return ResponseEntity.ok(service.findUnitById(id));
+	}
 
 	@PutMapping(path = "{id}")
 	public void updateUnit(@PathVariable(value = "id") final Long unitId, @RequestBody final UnitDto unitDto) {
 		service.update(unitId, unitDto);
 	}
 
-	@PutMapping(path = "{id}/parent")
-	public void updateUnitsParent(@PathVariable(value = "id") final Long unitId,
-			@RequestBody final UnitDto parentUnitDto) {
-		service.updateParentUnit(unitId, parentUnitDto);
+	@DeleteMapping(path = "{id}")
+	public void deleteUnit(@PathVariable(value = "id") final Long unitId) {
+		service.deleteUnit(unitId);
+	}
+
+	@GetMapping(path = "{id}/director")
+	public ResponseEntity<PersonDto> findDirectorOfUnitById(@PathVariable(value = "id") final Long unitId) {
+		return ResponseEntity.ok(service.findDirectorOfUnitById(unitId));
 	}
 
 	@PutMapping(path = "{id}/director")
@@ -101,24 +64,19 @@ public class UnitController {
 		service.updateDirector(unitId, directorDto);
 	}
 
-	@PutMapping(path = "{id}/members")
-	public void addMember(@PathVariable(value = "id") final Long unitId, @RequestBody final PersonDto newMemberDto) {
-		service.addMember(unitId, newMemberDto);
-	}
-
-	@DeleteMapping(path = "{id}")
-	public void deleteUnit(@PathVariable(value = "id") final Long unitId) {
-		service.deleteUnit(unitId);
-	}
-
-	@DeleteMapping(path = "{id}/parent")
-	public void removeParentUnit(@PathVariable(value = "id") final Long unitId) {
-		service.removeParentUnit(unitId);
-	}
-
 	@DeleteMapping(path = "{id}/director")
 	public void removeDirector(@PathVariable(value = "id") final Long unitId) {
 		service.removeDirector(unitId);
+	}
+
+	@GetMapping(path = "{id}/members")
+	public ResponseEntity<List<PersonDto>> findMemebersOfUnitById(@PathVariable(value = "id") final Long unitId) {
+		return ResponseEntity.ok(service.findMembersOfUnitById(unitId));
+	}
+
+	@PutMapping(path = "{id}/members")
+	public void addMember(@PathVariable(value = "id") final Long unitId, @RequestBody final PersonDto newMemberDto) {
+		service.addMember(unitId, newMemberDto);
 	}
 
 	@DeleteMapping(path = "{id}/members")
@@ -129,5 +87,16 @@ public class UnitController {
 	@DeleteMapping(path = "{unitId}/members/{memberId}")
 	public void removeMember(@PathVariable final Long unitId, @PathVariable final Long memberId) {
 		service.removeMember(unitId, memberId);
+	}
+
+	@PutMapping(path = "{id}/parent")
+	public void updateUnitsParent(@PathVariable(value = "id") final Long unitId,
+			@RequestBody final UnitDto parentUnitDto) {
+		service.updateParentUnit(unitId, parentUnitDto);
+	}
+
+	@DeleteMapping(path = "{id}/parent")
+	public void removeParentUnit(@PathVariable(value = "id") final Long unitId) {
+		service.removeParentUnit(unitId);
 	}
 }

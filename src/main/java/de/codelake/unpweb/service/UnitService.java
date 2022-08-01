@@ -26,6 +26,10 @@ public class UnitService {
 		this.mapper = mapper;
 	}
 
+	private Unit findUnit(final Long unitId) {
+		return repo.findById(unitId).orElseThrow(EntityNotFoundException::new);
+	}
+
 	public List<UnitDto> findAllUnits() {
 		return repo.findAll().stream().map(mapper::unitToUnitDto).toList();
 	}
@@ -47,27 +51,6 @@ public class UnitService {
 
 	public UnitDto saveNew() {
 		return mapper.unitToUnitDto(repo.save(new Unit()));
-	}
-
-	public UnitDto save(final UnitDto unsavedUnitDto) {
-		final Unit unsavedUnit = mapper.unitDtoToUnit(unsavedUnitDto);
-		final Unit savedUnit = repo.save(unsavedUnit);
-		//		personService.moveMembersToUnit(unsavedUnitDto.members(), savedUnit);
-		return mapper.unitToUnitDto(savedUnit);
-	}
-
-	public UnitDto setDirector(final UnitDto unitDto) {
-		//		Unit unit = repo.findById(unitDto.id()).orElseThrow(EntityNotFoundException::new);
-		return mapper.unitToUnitDto(repo.save(mapper.unitDtoToUnit(unitDto)));
-	}
-
-	public UnitDto setDirector(final Long unitId, final PersonDto personDto) {
-		final Unit unit = findUnit(unitId);
-		final Person person = personService.findPerson(personDto.id());
-
-		unit.setDirector(person);
-
-		return mapper.unitToUnitDto(repo.save(unit));
 	}
 
 	public void update(final Long unitId, final UnitDto unitDto) {
@@ -128,13 +111,8 @@ public class UnitService {
 		repo.deleteById(unitId);
 	}
 
-	private Unit findUnit(final Long unitId) {
-		return repo.findById(unitId).orElseThrow(EntityNotFoundException::new);
-	}
-
 	public void removeDirectorFromAllUnitsIfExists(final Long personId) {
 		final List<Unit> units = repo.findAllByDirectorId(personId);
 		units.forEach(unit -> removeDirector(unit.getId()));
 	}
-
 }

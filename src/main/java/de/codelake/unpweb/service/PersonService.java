@@ -28,7 +28,7 @@ public class PersonService {
 		this.mapper = mapper;
 	}
 
-	Person findPerson(final Long id) {
+	private Person findPerson(final Long id) {
 		return repo.findById(id).orElseThrow(EntityNotFoundException::new);
 	}
 
