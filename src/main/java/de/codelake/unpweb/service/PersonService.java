@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import de.codelake.unpweb.domain.dto.PersonDto;
@@ -20,8 +21,11 @@ public class PersonService {
 
 	private final PersonRepository repo;
 	private final EntityDtoMapper mapper;
+	private final UnitService unitService;
 
-	public PersonService(final PersonRepository repo, final EntityDtoMapper mapper) {
+	public PersonService(@Lazy final UnitService unitService, final PersonRepository repo,
+			final EntityDtoMapper mapper) {
+		this.unitService = unitService;
 		this.repo = repo;
 		this.mapper = mapper;
 	}
@@ -75,6 +79,10 @@ public class PersonService {
 		repo.saveAll(movedMembersList);
 	}
 
+	private List<Person> findAllMembersByIds(final Set<PersonSlimDto> members) {
+		return repo.findAllById(members.stream().map(PersonSlimDto::id).toList());
+	}
+
 	public void setBelongsTo(final PersonDto newMemberDto, final UnitDto unitDto) {
 		final Person person = findPerson(newMemberDto.id());
 		final Unit unit = mapper.unitDtoToUnit(unitDto);
@@ -88,8 +96,43 @@ public class PersonService {
 		repo.save(person);
 	}
 
-	private List<Person> findAllMembersByIds(final Set<PersonSlimDto> members) {
-		return repo.findAllById(members.stream().map(PersonSlimDto::id).toList());
+	public void deletePerson(final Long personId) {
+		// Integrity checks:
+		final Person personToDelete = findPerson(personId);
+		// Remove director reference
+		unitService.removeDirectorFromAllUnitsIfExists(personId);
+		// Remove supervisor reference
+		final List<Person> employees = repo.findAllBySupervisor(personToDelete);
+		employees.forEach(employee -> removeSupervisor(employee.getId()));
+
+		repo.delete(personToDelete);
 	}
 
+	public void removeSupervisor(final Long personId) {
+		final Person person = findPerson(personId);
+		person.setSupervisor(null);
+		repo.save(person);
+	}
+
+	public void update(final Long personId, final PersonDto personDto) {
+		final Person personToUpdate = findPerson(personId);
+		personToUpdate.setName(personDto.name());
+		personToUpdate.setInitials(personDto.initials());
+		personToUpdate.setRole(personDto.role());
+		repo.save(personToUpdate);
+	}
+
+	public void updateSupervisor(final Long personId, final PersonDto supervisorDto) {
+		final Person person = findPerson(personId);
+		final Person supervisor = mapper.personDtoToPerson(supervisorDto);
+		person.setSupervisor(supervisor);
+		repo.save(person);
+	}
+
+	public void updateBelongsTo(final Long personId, final UnitDto belongsToDto) {
+		final Person person = findPerson(personId);
+		final Unit belongsTo = mapper.unitDtoToUnit(belongsToDto);
+		person.setBelongsTo(belongsTo);
+		repo.save(person);
+	}
 }

@@ -9,8 +9,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
 
 import de.codelake.unpweb.domain.dto.PersonDto;
+import de.codelake.unpweb.domain.dto.PersonSlimDto;
+import de.codelake.unpweb.domain.dto.UnitDto;
+import de.codelake.unpweb.domain.dto.UnitSlimDto;
+import de.codelake.unpweb.domain.model.Person;
+import de.codelake.unpweb.domain.model.Unit;
 
 public class PersonTest_IT extends AbstractTest_IT {
 
@@ -55,4 +61,264 @@ public class PersonTest_IT extends AbstractTest_IT {
 		assertThat(personDto.id()).isNotNull();
 	}
 
+	@Test
+	@DisplayName("DELETE delete person without references - no integrity violation")
+	public void deletePerson() {
+		final HttpEntity<Void> request = new HttpEntity<>(null, headers);
+
+		// create deletable Person
+		ResponseEntity<PersonDto> response = template.postForEntity("/persons", request, PersonDto.class);
+
+		final String personUrl = String.format("/persons/%d", response.getBody().id());
+
+		// check for existence
+		response = template.getForEntity(personUrl, PersonDto.class);
+		assertThat(response.getBody()).isNotNull();
+
+		// delete Person
+		template.delete(personUrl);
+
+		// check for not existence
+		response = template.getForEntity(personUrl, PersonDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+
+	@DirtiesContext
+	@Test
+	@DisplayName("DELETE person")
+	public void deletePersonWithReference() {
+		final String endpoint = "/persons/1";
+		// delete Unit
+		template.delete(endpoint);
+
+		// check for not existence
+		final ResponseEntity<PersonDto> response = template.getForEntity(endpoint, PersonDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+	}
+
+	@Test
+	@DisplayName("PUT update person name")
+	public void updatePersonName() {
+		final String newPersonName = "NewPersonName";
+
+		// *** This would handle the client somehow ***
+		final String endpoint = "/persons/3";
+		ResponseEntity<PersonDto> response = template.getForEntity(endpoint, PersonDto.class);
+		PersonDto personDto = response.getBody();
+		final Person person = mapper.personDtoToPerson(personDto);
+		person.setName(newPersonName);
+		personDto = mapper.personToPersonDto(person);
+
+		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
+
+		// ***** Actual Test *****
+		template.put(endpoint, request);
+
+		response = template.getForEntity(endpoint, PersonDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().name()).isNotNull();
+		assertThat(response.getBody().name()).isEqualTo(newPersonName);
+	}
+
+	@Test
+	@DisplayName("PUT update person name with empty value")
+	public void deletePersonName() {
+		final String newPersonName = "";
+
+		// *** This would handle the client somehow ***
+		final String endpoint = "/persons/3";
+		ResponseEntity<PersonDto> response = template.getForEntity(endpoint, PersonDto.class);
+		PersonDto personDto = response.getBody();
+		final Person person = mapper.personDtoToPerson(personDto);
+		person.setName(newPersonName);
+		personDto = mapper.personToPersonDto(person);
+
+		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
+
+		// ***** Actual Test *****
+		template.put(endpoint, request);
+
+		response = template.getForEntity(endpoint, PersonDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().name()).isNotNull();
+		assertThat(response.getBody().name()).isEqualTo(newPersonName);
+	}
+
+	@Test
+	@DisplayName("PUT update person initials")
+	public void updatePersonInitials() {
+		final String newPersonInitials = "AB";
+
+		// *** This would handle the client somehow ***
+		final String endpoint = "/persons/4";
+		ResponseEntity<PersonDto> response = template.getForEntity(endpoint, PersonDto.class);
+		PersonDto personDto = response.getBody();
+		final Person person = mapper.personDtoToPerson(personDto);
+		person.setInitials(newPersonInitials);
+		personDto = mapper.personToPersonDto(person);
+
+		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
+
+		// ***** Actual Test *****
+		template.put(endpoint, request);
+
+		response = template.getForEntity(endpoint, PersonDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().initials()).isNotNull();
+		assertThat(response.getBody().initials()).isEqualTo(newPersonInitials);
+	}
+
+	@Test
+	@DisplayName("PUT update person initials with empty value")
+	public void deletePersonInitials() {
+		final String newPersonInitials = "";
+
+		// *** This would handle the client somehow ***
+		final String endpoint = "/persons/4";
+		ResponseEntity<PersonDto> response = template.getForEntity(endpoint, PersonDto.class);
+		PersonDto personDto = response.getBody();
+		final Person person = mapper.personDtoToPerson(personDto);
+		person.setInitials(newPersonInitials);
+		personDto = mapper.personToPersonDto(person);
+
+		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
+
+		// ***** Actual Test *****
+		template.put(endpoint, request);
+
+		response = template.getForEntity(endpoint, PersonDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().initials()).isNotNull();
+		assertThat(response.getBody().initials()).isEqualTo(newPersonInitials);
+	}
+
+	@Test
+	@DisplayName("PUT update person role")
+	public void updatePersonRole() {
+		final String newPersonRole = "CHEF";
+
+		// *** This would handle the client somehow ***
+		final String endpoint = "/persons/5";
+		ResponseEntity<PersonDto> response = template.getForEntity(endpoint, PersonDto.class);
+		PersonDto personDto = response.getBody();
+		final Person person = mapper.personDtoToPerson(personDto);
+		person.setRole(newPersonRole);
+		personDto = mapper.personToPersonDto(person);
+
+		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
+
+		// ***** Actual Test *****
+		template.put(endpoint, request);
+
+		response = template.getForEntity(endpoint, PersonDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().role()).isNotNull();
+		assertThat(response.getBody().role()).isEqualTo(newPersonRole);
+	}
+
+	@Test
+	@DisplayName("PUT update person role with empty value")
+	public void deletePersonRole() {
+		final String newPersonRole = "";
+
+		// *** This would handle the client somehow ***
+		final String endpoint = "/persons/5";
+		ResponseEntity<PersonDto> response = template.getForEntity(endpoint, PersonDto.class);
+		PersonDto personDto = response.getBody();
+		final Person person = mapper.personDtoToPerson(personDto);
+		person.setRole(newPersonRole);
+		personDto = mapper.personToPersonDto(person);
+
+		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
+
+		// ***** Actual Test *****
+		template.put(endpoint, request);
+
+		response = template.getForEntity(endpoint, PersonDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().role()).isNotNull();
+		assertThat(response.getBody().role()).isEqualTo(newPersonRole);
+	}
+
+	@Test
+	@DisplayName("PUT update supervisor")
+	public void updateSupervisor() {
+		// *** This would handle the client somehow ***
+		final Person newSupervisor = new Person();
+		newSupervisor.setId(2l);
+		final PersonDto newSupervisorDto = mapper.personToPersonDto(newSupervisor);
+
+		final HttpEntity<PersonDto> request = new HttpEntity<>(newSupervisorDto, headers);
+
+		// ***** Actual Test *****
+		template.put("/persons/6/supervisor", request);
+
+		final ResponseEntity<PersonDto> response = template.getForEntity("/persons/6", PersonDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+
+		final PersonDto personDto = response.getBody();
+		final PersonSlimDto supervisor = personDto.supervisor();
+		assertThat(supervisor).isNotNull();
+		assertThat(supervisor.id()).isEqualTo(2);
+	}
+
+	@Test
+	@DisplayName("DELETE remove supervisor reference")
+	public void removeSupervisor() {
+		// ***** Actual Test *****
+		template.delete("/persons/6/supervisor");
+
+		final ResponseEntity<PersonDto> response = template.getForEntity("/persons/6", PersonDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+
+		final PersonDto personDto = response.getBody();
+		final PersonSlimDto supervisor = personDto.supervisor();
+		assertThat(supervisor).isNull();
+	}
+
+	@Test
+	@DisplayName("PUT update belongsTo")
+	public void updateBelongsTo() {
+		// *** This would handle the client somehow ***
+		final Unit newBelongsTo = new Unit();
+		newBelongsTo.setId(4l);
+		final UnitDto newBelongsToDto = mapper.unitToUnitDto(newBelongsTo);
+
+		final HttpEntity<UnitDto> request = new HttpEntity<>(newBelongsToDto, headers);
+
+		// ***** Actual Test *****
+		template.put("/persons/7/belongsto", request);
+
+		final ResponseEntity<PersonDto> response = template.getForEntity("/persons/7", PersonDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+
+		final PersonDto personDto = response.getBody();
+		final UnitSlimDto belongsTo = personDto.belongsTo();
+		assertThat(belongsTo).isNotNull();
+		assertThat(belongsTo.id()).isEqualTo(4);
+	}
+
+	@Test
+	@DisplayName("DELETE remove belongsTo reference")
+	public void removeBelongsTo() {
+		// ***** Actual Test *****
+		template.delete("/persons/7/belongsto");
+
+		final ResponseEntity<PersonDto> response = template.getForEntity("/persons/7", PersonDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+
+		final PersonDto personDto = response.getBody();
+		final UnitSlimDto belongsTo = personDto.belongsTo();
+		assertThat(belongsTo).isNull();
+	}
 }

@@ -8,8 +8,8 @@ import de.codelake.unpweb.domain.model.Unit;
 
 public interface UnitRepository extends JpaRepository<Unit, Long> {
 
-	//	List<Unit> findUnitsByParentUnitId(Long parentUnitId);
+	List<Unit> findAllByParentUnit(Unit unit);
 
-	List<Unit> findUnitsByParentUnit(Unit unit);
+	List<Unit> findAllByDirectorId(Long personId);
 
 }

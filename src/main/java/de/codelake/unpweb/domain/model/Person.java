@@ -31,5 +31,4 @@ public class Person {
 	@ManyToOne
 	@EqualsAndHashCode.Exclude
 	private Unit belongsTo;
-
 }

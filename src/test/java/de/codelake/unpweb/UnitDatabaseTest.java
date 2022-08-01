@@ -48,11 +48,19 @@ public class UnitDatabaseTest {
 	}
 
 	@Test
-	public void testFindUnitsByParentUnitId() {
+	public void testFindAllByParentUnitId() {
 		final Optional<Unit> unit = unitRepo.findById(1l);
-		final List<Unit> unitList = unitRepo.findUnitsByParentUnit(unit.get());
+		final List<Unit> unitList = unitRepo.findAllByParentUnit(unit.get());
 
 		assertThat(unitList).isNotNull();
 		assertThat(unitList).hasSize(3);
+	}
+
+	@Test
+	public void testFindUnitsByDirectorId() {
+		final List<Unit> units = unitRepo.findAllByDirectorId(1l);
+
+		assertThat(units).isNotNull();
+		assertThat(units).hasSize(1);
 	}
 }

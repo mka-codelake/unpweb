@@ -87,8 +87,8 @@ public class UnitsTest_IT extends AbstractTest_IT {
 	}
 
 	@Test
-	@DisplayName("DELETE unit")
-	public void deleteUnit() {
+	@DisplayName("DELETE delete unit without references - no integrity violation")
+	public void deleteSimpleUnit() {
 		final HttpEntity<Void> request = new HttpEntity<>(null, headers);
 
 		// create deletable Unit
@@ -218,7 +218,7 @@ public class UnitsTest_IT extends AbstractTest_IT {
 
 	@Test
 	@DisplayName("PUT update units parent unit")
-	public void setParentUnit() {
+	public void updateParentUnit() {
 		// *** This would handle the client somehow ***
 		final Unit unit = new Unit();
 		unit.setId(2l);
@@ -256,7 +256,7 @@ public class UnitsTest_IT extends AbstractTest_IT {
 
 	@Test
 	@DisplayName("PUT update units director")
-	public void setDirector() {
+	public void updateDirector() {
 		// *** This would handle the client somehow ***
 		final Person person = new Person();
 		person.setId(6l);

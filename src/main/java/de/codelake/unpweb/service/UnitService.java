@@ -26,14 +26,6 @@ public class UnitService {
 		this.mapper = mapper;
 	}
 
-	//	public UnitSlimDto findUnitSlimById(final Long id) {
-	//		return mapper.unitToUnitSlimDto(findUnit(id));
-	//	}
-	//
-	//	public List<UnitSlimDto> findUnitsSlim() {
-	//		return repo.findAll().stream().map(mapper::unitToUnitSlimDto).toList();
-	//	}
-
 	public List<UnitDto> findAllUnits() {
 		return repo.findAll().stream().map(mapper::unitToUnitDto).toList();
 	}
@@ -128,7 +120,7 @@ public class UnitService {
 		// Integrity checks:
 		final Unit unitToDelete = findUnit(unitId);
 		// Remove parent unit reference
-		final List<Unit> units = repo.findUnitsByParentUnit(unitToDelete);
+		final List<Unit> units = repo.findAllByParentUnit(unitToDelete);
 		units.forEach(unit -> removeParentUnit(unit.getId()));
 		// Remove belongsTo references
 		unitToDelete.getMembers().forEach(member -> personService.removeBelongsTo(member.getId()));
@@ -138,6 +130,11 @@ public class UnitService {
 
 	private Unit findUnit(final Long unitId) {
 		return repo.findById(unitId).orElseThrow(EntityNotFoundException::new);
+	}
+
+	public void removeDirectorFromAllUnitsIfExists(final Long personId) {
+		final List<Unit> units = repo.findAllByDirectorId(personId);
+		units.forEach(unit -> removeDirector(unit.getId()));
 	}
 
 }
