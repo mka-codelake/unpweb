@@ -2,6 +2,9 @@ package de.codelake.unpweb;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -42,5 +45,14 @@ public class UnitDatabaseTest {
 		final Unit unit = unitRepo.getReferenceById(5l);
 		assertThat(unit).isNotNull();
 		assertThat(unit.getDirector()).isNull();
+	}
+
+	@Test
+	public void testFindUnitsByParentUnitId() {
+		final Optional<Unit> unit = unitRepo.findById(1l);
+		final List<Unit> unitList = unitRepo.findUnitsByParentUnit(unit.get());
+
+		assertThat(unitList).isNotNull();
+		assertThat(unitList).hasSize(3);
 	}
 }

@@ -4,9 +4,12 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,6 +19,8 @@ import lombok.EqualsAndHashCode;
 public class Unit {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "custom_unit")
+	@SequenceGenerator(name = "custom_unit", initialValue = 9, allocationSize = 10)
 	private Long id;
 
 	private String name;

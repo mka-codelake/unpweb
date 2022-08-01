@@ -14,17 +14,17 @@ public interface EntityDtoMapper {
 
 	UnitSlimDto unitToUnitSlimDto(Unit unit);
 
-	Unit unitSlimDtoToUnit(UnitSlimDto unitDto);
+	Unit unitSlimDtoToUnit(UnitSlimDto unitSlimDto);
 
 	UnitDto unitToUnitDto(Unit unit);
 
-	Unit unitDtoToUnit(UnitDto unitExtDto);
+	Unit unitDtoToUnit(UnitDto unitDto);
 
 	PersonSlimDto personToPersonSlimDto(Person person);
 
-	Person personSlimDtoToPerson(PersonSlimDto personDto);
+	Person personSlimDtoToPerson(PersonSlimDto personSlimDto);
 
 	PersonDto personToPersonDto(Person person);
 
-	Person personDtoToPerson(PersonDto personExtDto);
+	Person personDtoToPerson(PersonDto personDto);
 }
