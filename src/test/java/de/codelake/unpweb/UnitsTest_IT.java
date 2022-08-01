@@ -9,6 +9,9 @@ import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -120,16 +123,17 @@ public class UnitsTest_IT extends AbstractTest_IT {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
-	@Test
-	@DisplayName("PUT update unit name")
-	public void updateUnitName() {
-		final String newUnitName = "NewUnitName";
-
+	@ParameterizedTest
+	@EmptySource
+	@ValueSource(strings = { "ABC" })
+	@DisplayName("PUT update unit attributes with new and empty values")
+	public void updateUnitName(final String value) {
 		// *** This would handle the client somehow ***
 		ResponseEntity<UnitDto> response = template.getForEntity("/units/2", UnitDto.class);
 		UnitDto unitDto = response.getBody();
 		final Unit unit = mapper.unitDtoToUnit(unitDto);
-		unit.setName(newUnitName);
+		unit.setName(value);
+		unit.setAbbreviation(value);
 		unitDto = mapper.unitToUnitDto(unit);
 
 		final HttpEntity<UnitDto> request = new HttpEntity<>(unitDto, headers);
@@ -141,79 +145,9 @@ public class UnitsTest_IT extends AbstractTest_IT {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().name()).isNotNull();
-		assertThat(response.getBody().name()).isEqualTo(newUnitName);
-	}
-
-	@Test
-	@DisplayName("PUT update unit name with empty value")
-	public void deleteUnitName() {
-		final String newUnitName = "";
-
-		// *** This would handle the client somehow ***
-		ResponseEntity<UnitDto> response = template.getForEntity("/units/2", UnitDto.class);
-		UnitDto unitDto = response.getBody();
-		final Unit unit = mapper.unitDtoToUnit(unitDto);
-		unit.setName(newUnitName);
-		unitDto = mapper.unitToUnitDto(unit);
-
-		final HttpEntity<UnitDto> request = new HttpEntity<>(unitDto, headers);
-
-		// ***** Actual Test *****
-		template.put("/units/2", request);
-
-		response = template.getForEntity("/units/2", UnitDto.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).isNotNull();
-		assertThat(response.getBody().name()).isNotNull();
-		assertThat(response.getBody().name()).isEqualTo(newUnitName);
-	}
-
-	@Test
-	@DisplayName("PUT update unit abbreviation")
-	public void updateUnitAbbreviation() {
-		final String newUnitAbbr = "NewUnitAbbr";
-
-		// *** This would handle the client somehow ***
-		ResponseEntity<UnitDto> response = template.getForEntity("/units/3", UnitDto.class);
-		UnitDto unitDto = response.getBody();
-		final Unit unit = mapper.unitDtoToUnit(unitDto);
-		unit.setAbbreviation(newUnitAbbr);
-		unitDto = mapper.unitToUnitDto(unit);
-
-		final HttpEntity<UnitDto> request = new HttpEntity<>(unitDto, headers);
-
-		// ***** Actual Test *****
-		template.put("/units/3", request);
-
-		response = template.getForEntity("/units/3", UnitDto.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).isNotNull();
+		assertThat(response.getBody().name()).isEqualTo(value);
 		assertThat(response.getBody().abbreviation()).isNotNull();
-		assertThat(response.getBody().abbreviation()).isEqualTo(newUnitAbbr);
-	}
-
-	@Test
-	@DisplayName("PUT update unit abbreviation with empty value")
-	public void deleteUnitAbbreviation() {
-		final String newUnitAbbr = "";
-
-		// *** This would handle the client somehow ***
-		ResponseEntity<UnitDto> response = template.getForEntity("/units/3", UnitDto.class);
-		UnitDto unitDto = response.getBody();
-		final Unit unit = mapper.unitDtoToUnit(unitDto);
-		unit.setAbbreviation(newUnitAbbr);
-		unitDto = mapper.unitToUnitDto(unit);
-
-		final HttpEntity<UnitDto> request = new HttpEntity<>(unitDto, headers);
-
-		// ***** Actual Test *****
-		template.put("/units/3", request);
-
-		response = template.getForEntity("/units/3", UnitDto.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).isNotNull();
-		assertThat(response.getBody().abbreviation()).isNotNull();
-		assertThat(response.getBody().abbreviation()).isEqualTo(newUnitAbbr);
+		assertThat(response.getBody().abbreviation()).isEqualTo(value);
 	}
 
 	@Test
