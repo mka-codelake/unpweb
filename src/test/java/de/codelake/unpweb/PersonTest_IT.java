@@ -6,6 +6,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -96,21 +99,19 @@ public class PersonTest_IT extends AbstractTest_IT {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
-	@Test
-	@DisplayName("PUT update person name")
-	public void updatePersonName() {
-		final String newPersonName = "NewPersonName";
-		final String newPersonInitials = "AB";
-		final String newPersonRole = "CHEF";
-
+	@ParameterizedTest
+	@EmptySource
+	@ValueSource(strings = { "ABC" })
+	@DisplayName("PUT update person attributes with new and empty value")
+	public void updatePersonAttributes(final String value) {
 		// *** This would handle the client somehow ***
 		final String endpoint = "/persons/3";
 		ResponseEntity<PersonDto> response = template.getForEntity(endpoint, PersonDto.class);
 		PersonDto personDto = response.getBody();
 		final Person person = mapper.personDtoToPerson(personDto);
-		person.setName(newPersonName);
-		person.setInitials(newPersonInitials);
-		person.setRole(newPersonRole);
+		person.setName(value);
+		person.setInitials(value);
+		person.setRole(value);
 		personDto = mapper.personToPersonDto(person);
 
 		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
@@ -122,44 +123,11 @@ public class PersonTest_IT extends AbstractTest_IT {
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).isNotNull();
 		assertThat(response.getBody().name()).isNotNull();
-		assertThat(response.getBody().name()).isEqualTo(newPersonName);
+		assertThat(response.getBody().name()).isEqualTo(value);
 		assertThat(response.getBody().initials()).isNotNull();
-		assertThat(response.getBody().initials()).isEqualTo(newPersonInitials);
+		assertThat(response.getBody().initials()).isEqualTo(value);
 		assertThat(response.getBody().role()).isNotNull();
-		assertThat(response.getBody().role()).isEqualTo(newPersonRole);
-	}
-
-	@Test
-	@DisplayName("PUT update person name with empty value")
-	public void deletePersonName() {
-		final String newPersonName = "";
-		final String newPersonInitials = "";
-		final String newPersonRole = "";
-
-		// *** This would handle the client somehow ***
-		final String endpoint = "/persons/3";
-		ResponseEntity<PersonDto> response = template.getForEntity(endpoint, PersonDto.class);
-		PersonDto personDto = response.getBody();
-		final Person person = mapper.personDtoToPerson(personDto);
-		person.setName(newPersonName);
-		person.setInitials(newPersonInitials);
-		person.setRole(newPersonRole);
-		personDto = mapper.personToPersonDto(person);
-
-		final HttpEntity<PersonDto> request = new HttpEntity<>(personDto, headers);
-
-		// ***** Actual Test *****
-		template.put(endpoint, request);
-
-		response = template.getForEntity(endpoint, PersonDto.class);
-		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		assertThat(response.getBody()).isNotNull();
-		assertThat(response.getBody().name()).isNotNull();
-		assertThat(response.getBody().name()).isEqualTo(newPersonName);
-		assertThat(response.getBody().initials()).isNotNull();
-		assertThat(response.getBody().initials()).isEqualTo(newPersonInitials);
-		assertThat(response.getBody().role()).isNotNull();
-		assertThat(response.getBody().role()).isEqualTo(newPersonRole);
+		assertThat(response.getBody().role()).isEqualTo(value);
 	}
 
 	@Test
