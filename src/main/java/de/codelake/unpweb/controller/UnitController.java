@@ -121,8 +121,13 @@ public class UnitController {
 		service.removeDirector(unitId);
 	}
 
+	@DeleteMapping(path = "{id}/members")
+	public void removeAllMember(@PathVariable(value = "id") final Long unitId) {
+		service.removeAllMembers(unitId);
+	}
+
 	@DeleteMapping(path = "{unitId}/members/{memberId}")
-	public void removeMemeber(@PathVariable final Long unitId, @PathVariable final Long memberId) {
+	public void removeMember(@PathVariable final Long unitId, @PathVariable final Long memberId) {
 		service.removeMember(unitId, memberId);
 	}
 }

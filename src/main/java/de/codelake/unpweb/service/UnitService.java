@@ -119,6 +119,11 @@ public class UnitService {
 		personService.removeBelongsTo(memberId);
 	}
 
+	public void removeAllMembers(final Long unitId) {
+		final Unit unit = findUnit(unitId);
+		unit.getMembers().forEach(member -> personService.removeBelongsTo(member.getId()));
+	}
+
 	public void deleteUnit(final Long unitId) {
 		// Integrity checks:
 		final Unit unitToDelete = findUnit(unitId);
@@ -134,4 +139,5 @@ public class UnitService {
 	private Unit findUnit(final Long unitId) {
 		return repo.findById(unitId).orElseThrow(EntityNotFoundException::new);
 	}
+
 }

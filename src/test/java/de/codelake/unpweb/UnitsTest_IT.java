@@ -338,7 +338,7 @@ public class UnitsTest_IT {
 	}
 
 	@Test
-	@DisplayName("DELETE remove Member")
+	@DisplayName("DELETE remove single member")
 	public void removeMemeber() {
 		// ***** Actual Test *****
 		template.delete("/units/7/members/22");
@@ -351,5 +351,22 @@ public class UnitsTest_IT {
 		final Set<PersonSlimDto> members = unitDto.members();
 		assertThat(members).isNotNull();
 		assertFalse(members.stream().anyMatch(member -> member.id().equals(22l)));
+	}
+
+	@DirtiesContext
+	@Test
+	@DisplayName("DELETE remove all members")
+	public void removeAllMemeber() {
+		// ***** Actual Test *****
+		template.delete("/units/7/members");
+
+		final ResponseEntity<UnitDto> response = template.getForEntity("/units/7", UnitDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).isNotNull();
+
+		final UnitDto unitDto = response.getBody();
+		final Set<PersonSlimDto> members = unitDto.members();
+		assertThat(members).isNotNull();
+		assertThat(members).isEmpty();
 	}
 }
