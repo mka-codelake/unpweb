@@ -7,15 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
@@ -24,26 +18,10 @@ import de.codelake.unpweb.domain.dto.PersonDto;
 import de.codelake.unpweb.domain.dto.PersonSlimDto;
 import de.codelake.unpweb.domain.dto.UnitDto;
 import de.codelake.unpweb.domain.dto.UnitSlimDto;
-import de.codelake.unpweb.domain.mapper.EntityDtoMapper;
 import de.codelake.unpweb.domain.model.Person;
 import de.codelake.unpweb.domain.model.Unit;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-public class UnitsTest_IT {
-
-	@Autowired
-	private TestRestTemplate template;
-
-	@Autowired
-	private EntityDtoMapper mapper;
-
-	private HttpHeaders headers;
-
-	@BeforeEach
-	public void setUp() {
-		headers = new HttpHeaders();
-		headers.add("Content-Type", "application/json");
-	}
+public class UnitsTest_IT extends AbstractTest_IT {
 
 	@Test
 	@DisplayName("GET all units")
