@@ -1,10 +1,12 @@
 package de.codelake.unpweb.controller;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -51,5 +53,11 @@ public class PersonController {
 	@GetMapping(path = "{id}/belongsto")
 	public ResponseEntity<UnitDto> findBelongsToOfPersonById(@PathVariable(name = "id") final Long personId) {
 		return ResponseEntity.ok(service.findBelongsToOfPersonById(personId));
+	}
+
+	@PostMapping
+	public ResponseEntity<PersonDto> createNewPerson() {
+		final PersonDto personDto = service.saveNew();
+		return ResponseEntity.created(URI.create(String.format("persons/%d", personDto.id()))).body(personDto);
 	}
 }

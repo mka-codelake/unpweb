@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -38,6 +39,20 @@ public class PersonTest_IT extends AbstractTest_IT {
 		assertThat(personDto.supervisor().id()).isEqualTo(1);
 		assertThat(personDto.belongsTo()).isNotNull();
 		assertThat(personDto.belongsTo().id()).isEqualTo(1);
+	}
+
+	@Test
+	@DisplayName("POST create new empty person")
+	public void createEmptyPerson() {
+		final HttpEntity<Void> request = new HttpEntity<>(null, headers);
+
+		final ResponseEntity<PersonDto> response = template.postForEntity("/persons", request, PersonDto.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+
+		final PersonDto personDto = response.getBody();
+
+		assertThat(personDto).isNotNull();
+		assertThat(personDto.id()).isNotNull();
 	}
 
 }

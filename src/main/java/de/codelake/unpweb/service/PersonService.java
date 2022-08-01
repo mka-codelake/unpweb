@@ -58,6 +58,10 @@ public class PersonService {
 		return mapper.unitToUnitDto(belongsTo);
 	}
 
+	public PersonDto saveNew() {
+		return mapper.personToPersonDto(repo.save(new Person()));
+	}
+
 	public void moveMembersToUnit(final Set<PersonSlimDto> members, final Unit savedUnit) {
 		final List<Person> movedMembersList = findAllMembersByIds(members)
 				.stream()
@@ -87,4 +91,5 @@ public class PersonService {
 	private List<Person> findAllMembersByIds(final Set<PersonSlimDto> members) {
 		return repo.findAllById(members.stream().map(PersonSlimDto::id).toList());
 	}
+
 }
