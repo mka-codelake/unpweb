@@ -32,6 +32,7 @@ public class PersonTest_IT extends AbstractTest_IT {
 		final var response = template.getForEntity("/persons", (Class<List<PersonDto>>) (Class<?>) List.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).hasSize(26);
+		assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_JSON);
 	}
 
 	@Test
