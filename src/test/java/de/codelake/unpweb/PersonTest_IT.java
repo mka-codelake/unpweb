@@ -10,7 +10,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 
@@ -24,12 +26,25 @@ import de.codelake.unpweb.domain.model.Unit;
 public class PersonTest_IT extends AbstractTest_IT {
 
 	@Test
-	@DisplayName("GET all persons")
-	public void readAllPersons() {
+	@DisplayName("GET all persons in JSON format")
+	public void readAllPersonsAsJSON() {
 		@SuppressWarnings("unchecked")
 		final var response = template.getForEntity("/persons", (Class<List<PersonDto>>) (Class<?>) List.class);
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		assertThat(response.getBody()).hasSize(26);
+	}
+
+	@Test
+	@DisplayName("GET all persons in XML format")
+	public void readAllPersonsAsXML() {
+		headers.add("Accept", "application/xml");
+		final HttpEntity<Void> request = new HttpEntity<>(null, headers);
+
+		@SuppressWarnings("unchecked")
+		final var response = template.exchange("/persons", HttpMethod.GET, request, (Class<List<PersonDto>>) (Class<?>) List.class);
+		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		assertThat(response.getBody()).hasSize(26);
+		assertThat(response.getHeaders().getContentType()).isEqualTo(MediaType.APPLICATION_XML);
 	}
 
 	@Test
